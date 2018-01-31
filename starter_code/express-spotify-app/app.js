@@ -47,24 +47,26 @@ app.post('/artists', (req, res) => {
 });
 
 app.get('/albums', (req, res) => {
+	let input = req.query.itemName;
 	spotifyApi.getArtistAlbums(req.query.itemId)
 		.then((data) => {
 			let albums = data.body.items.map((album) => {
 				return { id: album.id, name: album.name, image: album.images[1].url }
 			});
-			res.render('image-list', { 'typeItem': 'albums', 'input': req.query.itemName, 'items': albums });
+			res.render('image-list', { 'typeItem': 'albums', 'input': input, 'items': albums });
 		}).catch((err) => {
 			console.error(err);
 		});
 });
 
 app.get('/tracks', (req, res) => {
+	let input = req.query.itemName;
 	spotifyApi.getAlbumTracks(req.query.itemId)
 		.then((data) => {
 			let tracks = data.body.items.map((track) => {
 				return { 'title': track.name, 'preview': track.preview_url }
 			});
-			res.render('track-list', { 'input': req.query.itemName, 'items': tracks });
+			res.render('track-list', { 'input': input, 'items': tracks });
 		}).catch((err) => {
 			console.error(err);
 		});

@@ -38,7 +38,8 @@ app.post('/artists', (req, res) => {
 	let input = req.body.input;
 	spotifyApi.searchArtists(input).then((data) => {
 		let artists = data.body.artists.items.map((artist) => {
-			return { id: artist.id, name: artist.name, image: artist.images[1].url }
+			let url = artist.images.length ? artist.images[1].url : "/images/noImage.jpg";
+			return { id: artist.id, name: artist.name, image: url }
 		});
 		res.render('image-list', { 'typeItem': 'artists' ,'input': input, 'items': artists });
 	}).catch((err) => {
@@ -51,7 +52,8 @@ app.get('/albums', (req, res) => {
 	spotifyApi.getArtistAlbums(req.query.itemId)
 		.then((data) => {
 			let albums = data.body.items.map((album) => {
-				return { id: album.id, name: album.name, image: album.images[1].url }
+				let url = album.images.length ? album.images[1].url : "/images/noImage.jpg";
+				return { id: album.id, name: album.name, image: url }
 			});
 			res.render('image-list', { 'typeItem': 'albums', 'input': input, 'items': albums });
 		}).catch((err) => {
@@ -74,5 +76,5 @@ app.get('/tracks', (req, res) => {
 
 // Server Started
 app.listen(3000, () => {
-	console.log('My first app listening on port 3000!');
+	console.log('App listening on port 3000!');
 });
